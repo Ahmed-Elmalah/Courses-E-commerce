@@ -37,6 +37,8 @@ const deleteCategory = asyncHandler(async (req, res) => {
     return next(new AppError(`No category found with ID: ${id}`, 404));
   }
 
+  categories.splice(index , 1);
+
   res.status(200).json({
     status: "success",
     message: "Category deleted successfully",

@@ -9,7 +9,7 @@ let courses = [
         duration: 40, 
         difficulty: "Intermediate",
         categoryId: 1,
-        price: 100, // ضفت السعر عشان لو حبيت تعمل Sort بيه
+        price: 100, 
         lessons: [
             { id: 1, title: "Introduction to React", content: "Understanding the Virtual DOM", duration: "10 mins" },
             { id: 2, title: "JSX Basics", content: "Writing HTML inside JavaScript", duration: "15 mins" },

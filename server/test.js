@@ -10,7 +10,7 @@ const axios = require("axios");
 //   });
 
 axios
-  .delete("http://localhost:3000/api/category/4",)
+  .delete("http://localhost:3000/api/courses/3",)
   .then((res) => {
     console.log(res.data);
   })
