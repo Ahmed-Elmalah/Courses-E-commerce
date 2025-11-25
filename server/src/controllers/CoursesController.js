@@ -5,6 +5,26 @@ const courses = require("../models/courseModel");
 const getAllCourses = asyncHandler(async (req, res, next) => {
   const { search, category ,sort} = req.query;
 
+  let result = [...courses];
+
+  if (search) {
+    result = result.filter((course) =>
+      course.title.trim().toLowerCase().includes(search.trim().toLowerCase())
+    );
+  }
+
+  if (category) {
+    result = result.filter((course) => course.categoryId === +category);
+  }
+
+  if (sort) {
+  if (sort === 'price') {
+    result.sort((a, b) => a.price - b.price);
+  } 
+  else if (sort === '-price') {
+    result.sort((a, b) => b.price - a.price);
+  }
+}
 
   res.json({
     status: "success",
