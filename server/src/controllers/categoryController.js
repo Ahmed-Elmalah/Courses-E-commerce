@@ -29,7 +29,6 @@ const addCategory = asyncHandler(async (req, res, next) => {
 });
 
 const deleteCategory = asyncHandler(async (req, res) => {
-  
   const id = +req.params.id;
   const index = categories.findIndex((category) => category.id === id);
 
@@ -37,18 +36,34 @@ const deleteCategory = asyncHandler(async (req, res) => {
     return next(new AppError(`No category found with ID: ${id}`, 404));
   }
 
-  categories.splice(index , 1);
+  categories.splice(index, 1);
 
   res.status(200).json({
     status: "success",
     message: "Category deleted successfully",
-    data: null
+    data: null,
   });
+});
 
+const updateCategory = asyncHandler(async (req, res, next) => {
+  const id = +req.params.id;
+  const category = categories.find((c) => c.id === id);
+
+  if (!category) {
+    return next(new AppError(`No category found with ID: ${id}`, 404));
+  }
+
+  category.name = req.body.name || category.name;
+
+  res.status(200).json({
+    status: "success",
+    data: { category },
+  });
 });
 
 module.exports = {
   getAllCategories,
   addCategory,
   deleteCategory,
+  updateCategory,
 };
