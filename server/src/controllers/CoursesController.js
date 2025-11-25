@@ -2,7 +2,7 @@ const AppError = require("../utils/appError");
 const asyncHandler = require("../utils/asyncHandler");
 const courses = require("../models/courseModel");
 
-getAllCourses = asyncHandler(async (req, res, next) => {
+const getAllCourses = asyncHandler(async (req, res, next) => {
   const { search } = req.query;
 
   if (search) {
@@ -23,7 +23,7 @@ getAllCourses = asyncHandler(async (req, res, next) => {
   });
 });
 
-getCourseById = asyncHandler(async (req, res, next) => {
+const getCourseById = asyncHandler(async (req, res, next) => {
   const id = +req.params.id;
   const course = courses.find((course) => course.id === id);
 
@@ -38,24 +38,61 @@ getCourseById = asyncHandler(async (req, res, next) => {
   });
 });
 
-deleteCourse = asyncHandler( async (req , res , next)=>{
-    const id = +req.params.id;
-    const index = courses.findIndex((course)=> course.id ===  id);
+const deleteCourse = asyncHandler(async (req, res, next) => {
+  const id = +req.params.id;
+  const index = courses.findIndex((course) => course.id === id);
 
-    if (index === -1){
-        return next(new AppError(`Can't find course with id: ${id} to delete`,404));
-    }
+  if (index === -1) {
+    return next(
+      new AppError(`Can't find course with id: ${id} to delete`, 404)
+    );
+  }
 
-    courses.splice(index, 1);
-    
-    res.status(200).json({
+  courses.splice(index, 1);
+
+  res.status(200).json({
     status: "success",
     message: "Course deleted",
     data: null,
   });
-})
+});
+
+const createCourse = asyncHandler(async (req, res, next) => {
+  const newCourse = {
+    id: req.body.id || courses.length + 1,
+    ...req.body,
+    lessons: req.body.lessons || [],
+  };
+
+  courses.push(newCourse);
+
+  res.status(201).json({
+    status: "success",
+    message: "New course added",
+    data: { course: newCourse },
+  });
+});
+
+const updateCourse = asyncHandler(async (req, res, next) => {
+  const id = +req.params.id;
+  const course = courses.find((c) => c.id === id);
+
+  if (!course) {
+    return next(new AppError(`No course found with ID: ${id}`, 404));
+  }
+
+  Object.assign(course, req.body);
+
+  res.status(200).json({
+    status: "success",
+    data: { course },
+  });
+});
 
 module.exports = {
   getAllCourses,
-  getCourseById,deleteCourse,
+  getCourseById,
+  deleteCourse,
+  createCourse,
+  updateCourse,
 };

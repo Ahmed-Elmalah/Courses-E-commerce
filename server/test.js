@@ -1,19 +1,29 @@
 const axios = require("axios");
-
-// axios
-//   .post("http://localhost:3000/api/category", { name: "test" })
-//   .then((res) => {
-//     console.log(res.data);
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
+const newCourse = {
+  title: "testttt",
+  instructor: "ahmed",
+  duration: 20,
+  difficulty: "Advanced",
+  categoryId: 3,
+  lessons: [
+    {title: "aha" , content : "how to say aha", duration : "1 min"}
+  ]
+};
 
 axios
-  .delete("http://localhost:3000/api/courses/3",)
+  .post("http://localhost:3000/api/courses", newCourse)
   .then((res) => {
     console.log(res.data);
   })
   .catch((err) => {
     console.log(err);
   });
+
+// axios
+//   .delete("http://localhost:3000/api/courses/8",)
+//   .then((res) => {
+//     console.log(res.data);
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
