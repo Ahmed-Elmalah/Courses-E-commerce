@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 export default function Tabs({ categories, activeTab, setActiveTab }) {
   return (
-    <div className="flex items-center h-full gap-4">
+    <div className="md:flex items-center h-full md:gap-4 grid grid-cols-2 gap-1.5">
       {categories.map((el, index) => (
         <Link
           key={index}
           onClick={() => setActiveTab(el)}
           to="#"
           className={`
-                        px-7 py-1 text-sm font-medium rounded-full transition duration-200 
+                         py-1 px-5 text-center text-sm font-medium rounded-full transition duration-200 
                         ${
             activeTab === el
               ? "bg-indigo-600 text-white shadow-md"
@@ -16,7 +16,7 @@ export default function Tabs({ categories, activeTab, setActiveTab }) {
           }
                     `}
         >
-                    {el}       {" "}
+                    {el}       
         </Link>
       ))}
     </div>

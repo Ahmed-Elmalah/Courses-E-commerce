@@ -5,7 +5,7 @@ export default function CourseCard({ el }) {
   const finalPrice = hasDiscount ? el.discount : el.price;
 
   return (
-    <div className="card bg-white rounded-xl shadow-lg hover:shadow-xl w-96 h-[50vh] ">
+    <div className="card bg-white rounded-xl shadow-lg hover:shadow-xl h-fit pb-6">
       <img
         src={el.image || el.img || noImg}
         alt={el.title}

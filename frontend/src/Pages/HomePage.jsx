@@ -5,7 +5,7 @@ import Section1 from "../Components/Section1";
 import CourseCard from "../Components/CourseCard";
 import Pagination from "../Components/Pagination";
 const ApiUrl = "http://localhost:3000/api";
-const categories = ["All", "Programming", "Languages", "Skills", "Design"];
+const categories = ["All", "Programming", "Languages", "Skills"];
 const itemsPerPage = 6;
 export default function HomePage() {
   const [courses, setCourses] = useState([]);
@@ -42,7 +42,7 @@ export default function HomePage() {
   const currentCourses = courses.slice(startIndex, endIndex);
   const totalPages = Math.ceil(totalResultsCount / itemsPerPage);
   return (
-    <div className="w-full full flex-col gap-10 items-center">
+    <div className="w-full flex-col gap-10 items-center">
       <Header />
 
       <Section1
@@ -55,13 +55,13 @@ export default function HomePage() {
         setSortType={setSortType}
       />
 
-      <div className="container w-80/100 flex flex-col gap-5 mx-auto px-4">
+      <div className="container w-full md:w-80/100 flex flex-col gap-5 mx-auto px-4 justify-center">
         <h1 className="text-2xl font-semibold text-gray-800">
           Courses ({totalResultsCount} Results)
         </h1>
 
         {currentCourses.length > 0 ? (
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center gap-3">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {currentCourses.map((course, index) => (
               <CourseCard key={course.id || index} el={course} />
             ))}
@@ -77,7 +77,6 @@ export default function HomePage() {
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />
-
       </div>
     </div>
   );
