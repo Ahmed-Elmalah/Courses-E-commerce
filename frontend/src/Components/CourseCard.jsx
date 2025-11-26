@@ -1,5 +1,3 @@
-// src/Components/CourseCard.jsx
-
 import { Link } from 'react-router-dom';
 import noImg from "../assets/noImage.webp";
 
@@ -12,11 +10,11 @@ export default function CourseCard({ el }) {
     to={`/courses/${el._id || el.id}`} 
     className="card-link" 
   >
-    <div className="card bg-white rounded-xl shadow-lg hover:shadow-xl h-fit pb-6">
+    <div className="card h-[50vh] bg-white rounded-xl shadow-lg hover:shadow-xl pb-6">
      <img
       src={el.image || el.img || noImg}
       alt={el.title}
-      className="w-full h-1/2 rounded-t object-cover"
+      className="w-full h-2/3 rounded-t object-cover"
      />
      <div className="card-body p-4 flex flex-col justify-between">
       <h2 className="card-title font-bold text-lg line-clamp-2">

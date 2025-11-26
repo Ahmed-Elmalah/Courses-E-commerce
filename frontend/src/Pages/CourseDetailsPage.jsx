@@ -9,6 +9,7 @@ export default function CourseDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState({});
+  const cat = ["Programming" ,"Languages", "Soft Skills"]
 
   // --- Data Fetching ---
 
@@ -60,7 +61,7 @@ export default function CourseDetailsPage() {
                 {course.title}
               </h1>
               <p className="text-lg text-indigo-600 font-medium">
-                {course.category || "Uncategorized"}
+                {cat[course.categoryId -1] || "Uncategorized"}
               </p>
             </div>
 
@@ -100,6 +101,9 @@ export default function CourseDetailsPage() {
                             <h4 className="text-lg font-semibold text-gray-800">
                               {lesson.title}
                             </h4>
+                            <p className="text-sm text-gray-600">
+                              Content: {lesson.content}
+                            </p>
                             <p className="text-sm text-gray-600">
                               Duration: {lesson.duration}
                             </p>
@@ -151,17 +155,17 @@ export default function CourseDetailsPage() {
                     className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition duration-200 shadow-lg transform hover:scale-105 mb-4"
                     onClick={() => {}}
                   >
-                    Buy This Course Now 🛒
+                    CheckOut
                   </button>
 
                   {/* زراير التحكم (Edit & Delete) - منظر فقط */}
                   <div className="flex space-x-3 mt-4">
                     <button className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 rounded-lg transition duration-200 text-sm opacity-80 cursor-default">
-                      ✏️ Edit Course
+                      Edit Course
                     </button>
 
                     <button className="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-lg transition duration-200 text-sm opacity-80 cursor-default">
-                      🗑️ Delete Course
+                      Delete Course
                     </button>
                   </div>
                 </div>

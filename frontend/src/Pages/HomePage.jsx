@@ -101,7 +101,9 @@ export default function HomePage() {
         />
       </div>
 
-      <Footer />
+      <div className="w-full">
+        <Footer />
+      </div>
     </div>
   );
 }
