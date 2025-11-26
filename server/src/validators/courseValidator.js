@@ -8,6 +8,7 @@ const courseSchema = Joi.object({
   difficulty: Joi.string().valid('Beginner', 'Intermediate', 'Advanced', 'All Levels').required(), 
   categoryId: Joi.number().integer().required(),
   price: Joi.number().min(0).optional(), 
+  description: Joi.string().min(10).optional(),
   lessons: Joi.array().items(
     Joi.object({
         title: Joi.string().required(),

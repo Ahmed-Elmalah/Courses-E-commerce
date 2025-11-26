@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate,Link } from "react-router-dom";
 import axios from "axios";
 import noImg from "../assets/noImage.webp";
 import Swal from "sweetalert2";
@@ -27,7 +27,7 @@ export default function CourseDetailsPage() {
     fetchCourse();
   }, [id]);
 
-  // delete function
+  // delete course function
 
   const deleteCourse = async () => {
     Swal.fire({
@@ -50,6 +50,9 @@ export default function CourseDetailsPage() {
       }
     });
   };
+
+  // update course function
+
 
   // --- Display Course Details ---
 
@@ -119,7 +122,7 @@ export default function CourseDetailsPage() {
                   <ul className="space-y-4">
                     {course.lessons &&
                       course.lessons.map((lesson) => (
-                        <LessonsCard lesson={lesson} />
+                        <LessonsCard key={lesson.id} lesson={lesson} />
                       ))}
                   </ul>
                 </div>
@@ -171,7 +174,7 @@ export default function CourseDetailsPage() {
 
                   {/* زراير التحكم (Edit & Delete) - منظر فقط */}
                   <div className="flex space-x-3 mt-4">
-                    <button className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 rounded-lg transition duration-200 text-sm opacity-80 cursor-default">
+                    <button onClick={()=> navigate(`/edit-course/${course.id}`)} className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 rounded-lg transition duration-200 text-sm opacity-80 cursor-default">
                       Edit Course
                     </button>
 

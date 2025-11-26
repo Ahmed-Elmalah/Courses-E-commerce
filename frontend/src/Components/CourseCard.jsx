@@ -7,7 +7,7 @@ export default function CourseCard({ el }) {
 
  return (
   <Link 
-    to={`/courses/${el._id || el.id}`} 
+    to={`/courses/${el.id}`} 
     className="card-link" 
   >
     <div className="card h-[50vh] bg-white rounded-xl shadow-lg hover:shadow-xl pb-6">
