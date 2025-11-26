@@ -7,21 +7,42 @@ import Pagination from "../Components/Pagination";
 const ApiUrl = "http://localhost:3000/api";
 const categories = ["All", "Programming", "Languages", "Skills"];
 const itemsPerPage = 6;
+
 export default function HomePage() {
+
   const [courses, setCourses] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("All");
+  const [activeTab, setActiveTab] = useState(0);
   const [sortType, setSortType] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
+
+useEffect(()=>{
+  const fetchCategories = async ()=>{
+    try{
+      const res = await axios.get(`${ApiUrl}/category`)
+      if (res.data.status === "success"){
+        setCategories([{ id: 0, name: "All" }, ...res.data.data.categories]);
+      }
+    }catch(err){
+      console.error("Failed to fetch categories", err);
+    }
+  };
+  fetchCategories();
+},[])
+
   useEffect(() => {
     setCurrentPage(1);
     let queryParams = {};
+
     if (searchTerm) queryParams.search = searchTerm;
+    if (activeTab !== 0) queryParams.category = activeTab;
     if (sortType === "price_asc") queryParams.sort = "price";
     else if (sortType === "price_desc") queryParams.sort = "-price";
 
     const queryString = new URLSearchParams(queryParams).toString();
     const url = `${ApiUrl}/courses?${queryString}`;
+
     axios
       .get(url)
       .then((res) => {
@@ -35,16 +56,18 @@ export default function HomePage() {
         console.error("API Error:", err);
         setCourses([]);
       });
+
   }, [searchTerm, activeTab, sortType]);
+
   const totalResultsCount = courses.length;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentCourses = courses.slice(startIndex, endIndex);
   const totalPages = Math.ceil(totalResultsCount / itemsPerPage);
   return (
-    <div className="w-full flex-col gap-10 items-center">
+    <div className="w-full flex-col gap-10 items-center overflow-hidden">
       <Header />
-
+      
       <Section1
         categories={categories}
         searchTerm={searchTerm}
