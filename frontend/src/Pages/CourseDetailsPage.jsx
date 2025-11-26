@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom"; // 🆕 Added useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import noImg from "../assets/noImage.webp";
-import { GrLinkPrevious } from "react-icons/gr";
 
-// Ensure this URL matches your server address
 const ApiUrl = "http://localhost:3000/api";
 
 export default function CourseDetailsPage() {
   const { id } = useParams();
-  const navigate = useNavigate(); // 🆕 Initialize useNavigate hook
+  const navigate = useNavigate();
   const [course, setCourse] = useState({});
 
-  // Simplified Data Fetching (Removed catch block)
+  // --- Data Fetching ---
+
   useEffect(() => {
     const fetchCourse = async () => {
       const res = await axios.get(`${ApiUrl}/courses/${id}`);
@@ -26,26 +25,36 @@ export default function CourseDetailsPage() {
   }, [id]);
 
   // --- Display Course Details ---
+
   const hasDiscount =
     course.discount && course.discount > 0 && course.discount !== course.price;
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto p-4 md:p-8 max-w-6xl">
-        {/* 🆕 GO BACK BUTTON */}
         <button
-          onClick={() => navigate(-1)} // Function to go back one step in history
-          className="flex gap-2 items-center text-indigo-600 hover:text-indigo-900  mb-8 cursor-pointer font-medium transition duration-150"
+          onClick={() => navigate("../")}
+          className="flex items-center text-indigo-600 hover:text-indigo-800 mb-6 font-medium transition duration-150"
         >
-          <GrLinkPrevious />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
           Go Back to Courses
         </button>
-        {/* END GO BACK BUTTON */}
 
-        {/* Conditional rendering: only show content if course.title exists (data loaded) */}
-        {course.title && (
+        {course.title ? (
           <div className="bg-white rounded-xl shadow-2xl p-6 md:p-10">
-            {/* Course Title and Category */}
             <div className="border-b pb-4 mb-6">
               <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
                 {course.title}
@@ -55,7 +64,6 @@ export default function CourseDetailsPage() {
               </p>
             </div>
 
-            {/* Course Image */}
             <div className="w-full h-96 bg-gray-200 rounded-lg overflow-hidden mb-8">
               <img
                 src={course.image || course.img || noImg}
@@ -64,19 +72,44 @@ export default function CourseDetailsPage() {
               />
             </div>
 
-            {/* Content Split: Description + Pricing */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Main Column (Description) */}
               <div className="lg:col-span-2">
+                {/* Description */}
                 <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">
                   About This Course
                 </h2>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                <p className="text-gray-700 leading-relaxed">
                   {course.description ||
                     "No description is available for this course."}
                 </p>
 
-                {/* Additional Details */}
+                {/* Lessons/Course Content Section */}
+                <div className="mt-10 pt-4 border-t">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                    Course Content ({course.lessons?.length || 0} Lessons)
+                  </h2>
+
+                  <ul className="space-y-4">
+                    {course.lessons &&
+                      course.lessons.map((lesson) => (
+                        <li
+                          key={lesson.id}
+                          className="bg-gray-100 p-4 rounded-lg shadow-sm flex justify-between items-center transition duration-150 hover:bg-gray-200"
+                        >
+                          <div>
+                            <h4 className="text-lg font-semibold text-gray-800">
+                              {lesson.title}
+                            </h4>
+                            <p className="text-sm text-gray-600">
+                              Duration: {lesson.duration}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+
+                {/* Course Features */}
                 <div className="mt-8 pt-4 border-t">
                   <h3 className="text-xl font-bold mb-3">Course Features</h3>
                   <ul className="list-disc list-inside space-y-2 text-gray-600 pl-4">
@@ -94,7 +127,6 @@ export default function CourseDetailsPage() {
                 <div className="sticky top-10 p-6 bg-indigo-50 rounded-lg shadow-xl border border-indigo-200">
                   <p className="text-gray-600 text-xl mb-2">Price:</p>
 
-                  {/* Price and Discount Display */}
                   <div className="flex items-baseline gap-3 mb-6">
                     {hasDiscount ? (
                       <>
@@ -115,17 +147,31 @@ export default function CourseDetailsPage() {
                     )}
                   </div>
 
-                  {/* Purchase Button */}
                   <button
-                    className="w-full bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition duration-200 shadow-lg transform hover:scale-105"
-                    onClick={() => alert(`Adding ${course.title} to cart!`)}
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition duration-200 shadow-lg transform hover:scale-105 mb-4"
+                    onClick={() => {}}
                   >
-                    Buy This Course Now +
+                    Buy This Course Now 🛒
                   </button>
+
+                  {/* زراير التحكم (Edit & Delete) - منظر فقط */}
+                  <div className="flex space-x-3 mt-4">
+                    <button className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 rounded-lg transition duration-200 text-sm opacity-80 cursor-default">
+                      ✏️ Edit Course
+                    </button>
+
+                    <button className="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-lg transition duration-200 text-sm opacity-80 cursor-default">
+                      🗑️ Delete Course
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        ) : (
+          <p className="text-center text-gray-500 mt-10">
+            Loading course details or course not found...
+          </p>
         )}
       </div>
     </div>
