@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import noImg from "../assets/noImage.webp";
+import Swal from "sweetalert2";
+import LessonsCard from "../Components/LessonsCard";
 
 const ApiUrl = "http://localhost:3000/api";
 
@@ -9,7 +11,7 @@ export default function CourseDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState({});
-  const cat = ["Programming" ,"Languages", "Soft Skills"]
+  const cat = ["Programming", "Languages", "Soft Skills"];
 
   // --- Data Fetching ---
 
@@ -24,6 +26,30 @@ export default function CourseDetailsPage() {
 
     fetchCourse();
   }, [id]);
+
+  // delete function
+
+  const deleteCourse = async () => {
+    Swal.fire({
+      title: "Are you sure?",
+      showCancelButton: true,
+      confirmButtonColor: "#4f39f6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it",
+      theme: "dark",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted",
+          text: "Your file has been deleted.",
+          icon: "success",
+          theme: "dark",
+        });
+        axios.delete(`${ApiUrl}/courses/${course.id}`);
+        navigate("../");
+      }
+    });
+  };
 
   // --- Display Course Details ---
 
@@ -61,7 +87,7 @@ export default function CourseDetailsPage() {
                 {course.title}
               </h1>
               <p className="text-lg text-indigo-600 font-medium">
-                {cat[course.categoryId -1] || "Uncategorized"}
+                {cat[course.categoryId - 1] || "Uncategorized"}
               </p>
             </div>
 
@@ -93,22 +119,7 @@ export default function CourseDetailsPage() {
                   <ul className="space-y-4">
                     {course.lessons &&
                       course.lessons.map((lesson) => (
-                        <li
-                          key={lesson.id}
-                          className="bg-gray-100 p-4 rounded-lg shadow-sm flex justify-between items-center transition duration-150 hover:bg-gray-200"
-                        >
-                          <div>
-                            <h4 className="text-lg font-semibold text-gray-800">
-                              {lesson.title}
-                            </h4>
-                            <p className="text-sm text-gray-600">
-                              Content: {lesson.content}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              Duration: {lesson.duration}
-                            </p>
-                          </div>
-                        </li>
+                        <LessonsCard lesson={lesson} />
                       ))}
                   </ul>
                 </div>
@@ -164,7 +175,10 @@ export default function CourseDetailsPage() {
                       Edit Course
                     </button>
 
-                    <button className="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-lg transition duration-200 text-sm opacity-80 cursor-default">
+                    <button
+                      onClick={deleteCourse}
+                      className="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-lg transition duration-200 text-sm opacity-80 cursor-default"
+                    >
                       Delete Course
                     </button>
                   </div>
