@@ -4,12 +4,12 @@ import Header from "../Components/Header";
 import Section1 from "../Components/Section1";
 import CourseCard from "../Components/CourseCard";
 import Pagination from "../Components/Pagination";
+import Footer from "../Components/Footer";
 const ApiUrl = "http://localhost:3000/api";
 const categories = ["All", "Programming", "Languages", "Skills"];
 const itemsPerPage = 6;
 
 export default function HomePage() {
-
   const [courses, setCourses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,19 +17,19 @@ export default function HomePage() {
   const [sortType, setSortType] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
 
-useEffect(()=>{
-  const fetchCategories = async ()=>{
-    try{
-      const res = await axios.get(`${ApiUrl}/category`)
-      if (res.data.status === "success"){
-        setCategories([{ id: 0, name: "All" }, ...res.data.data.categories]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(`${ApiUrl}/category`);
+        if (res.data.status === "success") {
+          setCategories([{ id: 0, name: "All" }, ...res.data.data.categories]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch categories", err);
       }
-    }catch(err){
-      console.error("Failed to fetch categories", err);
-    }
-  };
-  fetchCategories();
-},[])
+    };
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -56,7 +56,6 @@ useEffect(()=>{
         console.error("API Error:", err);
         setCourses([]);
       });
-
   }, [searchTerm, activeTab, sortType]);
 
   const totalResultsCount = courses.length;
@@ -65,9 +64,9 @@ useEffect(()=>{
   const currentCourses = courses.slice(startIndex, endIndex);
   const totalPages = Math.ceil(totalResultsCount / itemsPerPage);
   return (
-    <div className="w-full flex-col gap-10 items-center overflow-hidden">
+    <div className="w-full flex flex-col min-h-dvh gap-5  items-center justify-between">
       <Header />
-      
+
       <Section1
         categories={categories}
         searchTerm={searchTerm}
@@ -101,6 +100,8 @@ useEffect(()=>{
           setCurrentPage={setCurrentPage}
         />
       </div>
+
+      <Footer />
     </div>
   );
 }

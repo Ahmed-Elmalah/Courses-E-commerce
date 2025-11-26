@@ -7,7 +7,7 @@ export default function SortMenu({ sortType, setSortType }) {
       <select
         value={sortType}
         onChange={(e) => setSortType(e.target.value)}
-        className="select bg-gray-50 w-full text-gray-700 font-semibold border-none rounded-lg p-2 focus:ring-indigo-500 focus:border-indigo-500"
+        className="select bg-gray-50 w-full text-gray-700 font-semibold border-gray-500 rounded-3xl p-2 ps-3 focus:ring-indigo-500 focus:border-indigo-500"
       >
         <option value="default" className="font-normal">
           Default
