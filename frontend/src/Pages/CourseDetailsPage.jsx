@@ -55,7 +55,6 @@ export default function CourseDetailsPage() {
           text: "Your file has been deleted.",
           icon: "success",
           theme: "dark",
-          
         });
         axios.delete(`${ApiUrl}/courses/${course.id}`);
         navigate("../");
@@ -73,7 +72,7 @@ export default function CourseDetailsPage() {
 
   const openAddModal = () => {
     setEditingLesson(null); // بنصفر حالة التعديل عشان نفتح فورم فاضية
-    setIsModalOpen(true);   // بنفتح المودال
+    setIsModalOpen(true); // بنفتح المودال
   };
 
   // 3. تقديم الفورم (Handling Submit)
@@ -82,16 +81,18 @@ export default function CourseDetailsPage() {
       const cleanValues = {
         title: values.title,
         content: values.content,
-        duration: values.duration
+        duration: values.duration,
       };
 
       if (editingLesson) {
         // --- حالة التعديل (Edit) ---
-        const res = await axios.put(
-          `${ApiUrl}/courses/${id}/lessons/${editingLesson.id}`,
-          cleanValues
-        );
-        
+        console.log(editingLesson);
+
+        // const res = await axios.put(
+        //   `${ApiUrl}/courses/${id}/lessons/${editingLesson.id}`,
+        //   cleanValues
+        // );
+
         // تحديث الـ State محلياً
         setCourse((prev) => ({
           ...prev,
@@ -99,11 +100,14 @@ export default function CourseDetailsPage() {
             l.id === editingLesson.id ? { ...l, ...cleanValues } : l
           ),
         }));
-        toast.success("Lesson updated successfully")
+        toast.success("Lesson updated successfully");
       } else {
         // --- حالة الإضافة (Add) ---
-        const res = await axios.post(`${ApiUrl}/courses/${id}/lessons`, cleanValues);
-        
+        const res = await axios.post(
+          `${ApiUrl}/courses/${id}/lessons`,
+          cleanValues
+        );
+
         // إضافة الدرس الجديد للـ State
         setCourse((prev) => ({
           ...prev,
@@ -111,11 +115,11 @@ export default function CourseDetailsPage() {
         }));
         toast.success("Lesson added successfully");
       }
-      
+
       setIsModalOpen(false); // قفل المودال
     } catch (err) {
       console.error(err);
-      toast.error("Operation failed")
+      toast.error("Operation failed");
     }
   };
   // --- Display Course Details ---
@@ -161,7 +165,11 @@ export default function CourseDetailsPage() {
             <div className="w-full h-96 bg-gray-200 rounded-lg overflow-hidden mb-8">
               <img
                 // src={course.image ?? course.img ?? noImg}
-                src={course.image === "" || course.ime === ""? noImg :course.image ?? course.img}
+                src={
+                  course.image === "" || course.ime === ""
+                    ? noImg
+                    : course.image ?? course.img
+                }
                 alt={course.title}
                 className="w-full h-full object-cover"
               />
@@ -184,13 +192,23 @@ export default function CourseDetailsPage() {
                     <h2 className="text-2xl font-bold text-gray-800 mb-4">
                       Course Content ({course.lessons?.length || 0} Lessons)
                     </h2>
-                    <button onClick={openAddModal} className="btn bg-indigo-600 hover:bg-indigo-700">Add new lesson</button>
+                    <button
+                      onClick={openAddModal}
+                      className="btn bg-indigo-600 hover:bg-indigo-700"
+                    >
+                      Add new lesson
+                    </button>
                   </div>
 
                   <ul className="space-y-4">
                     {course.lessons &&
-                      course.lessons.map((lesson) => (
-                        <LessonsCard key={lesson.id} lesson={lesson} onDelete={handleLessonDelete} onEdit={openEditModal} />
+                      course.lessons.map((lesson, index) => (
+                        <LessonsCard
+                          key={lesson.id}
+                          lesson={lesson}
+                          onDelete={handleLessonDelete}
+                          onEdit={openEditModal}
+                        />
                       ))}
                   </ul>
                 </div>
@@ -271,7 +289,7 @@ export default function CourseDetailsPage() {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleModalSubmit}
         initialValues={editingLesson} // لو فيه درس، ابعته كقيم أولية
-        isEditMode={!!editingLesson}  // Boolean عشان نغير العنوان
+        isEditMode={!!editingLesson} // Boolean عشان نغير العنوان
       />
     </div>
   );
