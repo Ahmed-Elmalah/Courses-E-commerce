@@ -12,7 +12,7 @@ export default function CourseCard({ el }) {
   >
     <div className="card h-[50vh] bg-white rounded-xl shadow-lg hover:shadow-xl pb-6">
      <img
-      src={el.image || el.img || noImg}
+      src={el.img || noImg}
       alt={el.title}
       className="w-full h-2/3 rounded-t object-cover"
      />

@@ -78,9 +78,12 @@ export default function HomePage() {
       />
 
       <div className="container w-full md:w-80/100 flex flex-col gap-5 mx-auto px-4 justify-center">
-        <h1 className="text-2xl font-semibold text-gray-800">
+        <div className="flex justify-between w-full">
+          <h1 className="text-2xl font-semibold text-gray-800">
           Courses ({totalResultsCount} Results)
         </h1>
+        <button className="btn bg-indigo-600 hover:bg-indigo-700">Add new course</button>
+        </div>
 
         {currentCourses.length > 0 ? (
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

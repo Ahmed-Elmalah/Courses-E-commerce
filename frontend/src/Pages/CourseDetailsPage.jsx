@@ -64,7 +64,7 @@ export default function CourseDetailsPage() {
       <div className="container mx-auto p-4 md:p-8 max-w-6xl">
         <button
           onClick={() => navigate("../")}
-          className="flex items-center text-indigo-600 hover:text-indigo-800 mb-6 font-medium transition duration-150"
+          className="flex items-center cursor-pointer text-indigo-600 hover:text-indigo-800 mb-6 font-medium transition duration-150"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

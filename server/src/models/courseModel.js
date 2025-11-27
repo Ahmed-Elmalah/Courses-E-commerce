@@ -8,6 +8,7 @@ let courses = [
         instructor: "Andrew Mead", 
         duration: 40, 
         difficulty: "Intermediate",
+        img : "https://www.classcentral.com/report/wp-content/uploads/2022/03/Frame-3.png",
         categoryId: 1,
         price: 100, 
         lessons: [
@@ -23,6 +24,7 @@ let courses = [
         duration: 35, 
         difficulty: "Advanced",
         categoryId: 1,
+        img : "https://www.classcentral.com/report/wp-content/uploads/2022/03/Frame-3.png",
         price: 120,
         lessons: [
             { id: 1, title: "Node.js Architecture", content: "Event Loop and Thread Pool", duration: "25 mins" },
@@ -36,6 +38,7 @@ let courses = [
         duration: 25, 
         difficulty: "Beginner",
         categoryId: 1,
+        img : "https://www.classcentral.com/report/wp-content/uploads/2022/03/Frame-3.png",
         price: 90,
         lessons: [
             { id: 1, title: "Python Setup", content: "Installing Anaconda", duration: "10 mins" },
@@ -51,6 +54,7 @@ let courses = [
         duration: 20, 
         difficulty: "Beginner",
         categoryId: 2,
+        img : "https://www.llinstitute.com/wp-content/uploads/2022/12/feature-image.png",
         price: 50,
         lessons: [
             { id: 1, title: "The Alphabet", content: "Pronunciation basics", duration: "15 mins" },
@@ -64,6 +68,7 @@ let courses = [
         duration: 15, 
         difficulty: "Intermediate",
         categoryId: 2,
+        img : "https://www.llinstitute.com/wp-content/uploads/2022/12/feature-image.png",
         price: 80,
         lessons: [
             { id: 1, title: "Email Etiquette", content: "Writing professional emails", duration: "20 mins" },
@@ -79,6 +84,7 @@ let courses = [
         duration: 5, 
         difficulty: "Beginner",
         categoryId: 3,
+        img  :"https://www.totalsuccess.co.uk/wp-content/uploads/2018/06/iStock-637711196_super-scaled.jpg",
         price: 40,
         lessons: [
             { id: 1, title: "Overcoming Fear", content: "Psychological tricks", duration: "12 mins" },
