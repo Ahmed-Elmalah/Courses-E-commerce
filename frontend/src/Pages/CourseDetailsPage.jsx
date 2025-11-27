@@ -71,6 +71,11 @@ export default function CourseDetailsPage() {
     setIsModalOpen(true);
   };
 
+  const openAddModal = () => {
+    setEditingLesson(null); // بنصفر حالة التعديل عشان نفتح فورم فاضية
+    setIsModalOpen(true);   // بنفتح المودال
+  };
+
   // 3. تقديم الفورم (Handling Submit)
   const handleModalSubmit = async (values) => {
     try {
@@ -179,7 +184,7 @@ export default function CourseDetailsPage() {
                     <h2 className="text-2xl font-bold text-gray-800 mb-4">
                       Course Content ({course.lessons?.length || 0} Lessons)
                     </h2>
-                    <button className="btn bg-indigo-600 hover:bg-indigo-700">Add new lesson</button>
+                    <button onClick={openAddModal} className="btn bg-indigo-600 hover:bg-indigo-700">Add new lesson</button>
                   </div>
 
                   <ul className="space-y-4">

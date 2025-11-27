@@ -3,6 +3,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import HomePage from "./Pages/HomePage";
 import CourseDetailsPage from "./Pages/CourseDetailsPage.jsx";
 import EditCoursePage from "./Pages/EditCoursePage.jsx";
+import AddCoursePage from "./Pages/AddCoursePage.jsx";
 export default function App() {
   return (
     <div className="w-full overflow-auto min-h-dvh bg-gray-100 text-gray-900">
@@ -13,6 +14,7 @@ export default function App() {
           <Route path="*" element={<h1>404 Error | Page not found</h1>} />
           <Route path="/courses/:id" element={<CourseDetailsPage />} />
           <Route path="/edit-course/:id" element={<EditCoursePage />} />
+          <Route path="/add-course" element={<AddCoursePage />} />
         </Routes>
       </BrowserRouter>
     </div>

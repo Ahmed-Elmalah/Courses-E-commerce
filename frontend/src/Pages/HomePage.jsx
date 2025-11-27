@@ -5,6 +5,7 @@ import Section1 from "../Components/Section1";
 import CourseCard from "../Components/CourseCard";
 import Pagination from "../Components/Pagination";
 import Footer from "../Components/Footer";
+import { useNavigate } from "react-router-dom";
 const ApiUrl = "http://localhost:3000/api";
 const categories = ["All", "Programming", "Languages", "Skills"];
 const itemsPerPage = 6;
@@ -16,6 +17,7 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState(0);
   const [sortType, setSortType] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -82,7 +84,7 @@ export default function HomePage() {
           <h1 className="text-2xl font-semibold text-gray-800">
           Courses ({totalResultsCount} Results)
         </h1>
-        <button className="btn bg-indigo-600 hover:bg-indigo-700">Add new course</button>
+        <button onClick={() => navigate("/add-course")} className="btn bg-indigo-600 hover:bg-indigo-700">Add new course</button>
         </div>
 
         {currentCourses.length > 0 ? (
