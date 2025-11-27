@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import Header from "../Components/Header";
 import toast from "react-hot-toast";
 
 const ApiUrl = "http://localhost:3000/api";
@@ -20,6 +19,8 @@ export default function EditCoursePage() {
     price: "",
     difficulty: "Beginner",
     categoryId: "",
+    description: "",
+    image: "",
   });
 
   // 1. جلب بيانات الكورس + الأقسام
@@ -42,6 +43,8 @@ export default function EditCoursePage() {
             price: course.price || 0,
             difficulty: course.difficulty || "Beginner",
             categoryId: course.categoryId || "",
+            description: course.description || "",
+            image: course.image ?? course.img ?? "",
           });
         }
 
@@ -71,25 +74,33 @@ export default function EditCoursePage() {
         .min(0, "Must be positive"),
       duration: Yup.number().required("Duration is required"),
       categoryId: Yup.string().required("Category is required"),
+      description: Yup.string().optional(),
+      image: Yup.string()
+        .test(
+          'is-url-or-empty', 
+          'Must be a valid URL', 
+          (value) => !value || Yup.string().url().isValidSync(value)
+        )
+        .optional(),
     }),
     onSubmit: async (values) => {
       try {
-        // تحويل القيم الرقمية للتأكد (عشان الباك اند ميضربش)
         const payload = {
           ...values,
           price: Number(values.price),
           duration: Number(values.duration),
           categoryId: Number(values.categoryId),
+          image: values.image || "",
         };
 
         const res = await axios.put(`${ApiUrl}/courses/${id}`, payload);
 
         if (res.status === 200 || res.status === 201) {
-          toast.success('Course updated successfully!')
+          toast.success("Course updated successfully!");
           navigate(`/courses/${id}`); // رجعه لصفحة التفاصيل
         }
       } catch (err) {
-        toast.error("Failed to update course ")
+        toast.error("Failed to update course ");
       }
     },
   });
@@ -98,8 +109,6 @@ export default function EditCoursePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-10">
-      <Header />
-
       <div className="container mx-auto px-4 mt-10 max-w-2xl">
         <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">
@@ -121,6 +130,56 @@ export default function EditCoursePage() {
               {formik.touched.title && formik.errors.title && (
                 <div className="text-red-500 text-xs mt-1">
                   {formik.errors.title}
+                </div>
+              )}
+            </div>
+
+            {/* Description Field */}
+            <div className="col-span-full">
+              {" "}
+              {/* عشان ياخد العرض كامل لو انت عامل grid */}
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Course Description
+              </label>
+              <div className="relative">
+                <textarea
+                  rows="5" // عدد السطور المبدئي
+                  placeholder="Write a detailed description about the course content, objectives, and prerequisites..."
+                  {...formik.getFieldProps("description")}
+                  className={`
+         w-full px-4 py-2 border border-gray-300 resize-none rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition
+        ${
+          formik.touched.description && formik.errors.description
+            ? "border-red-500 ring-1 ring-red-500"
+            : "border-gray-300"
+        }
+      `}
+                ></textarea>
+
+                {/* أيقونة صغيرة اختيارية في الزاوية كمنظر جمالي */}
+                <div className="absolute bottom-3 right-3 text-gray-400 text-xs pointer-events-none">
+                  {formik.values.description
+                    ? formik.values.description.length
+                    : 0}{" "}
+                  chars
+                </div>
+              </div>
+              {/* رسالة الخطأ */}
+              {formik.touched.description && formik.errors.description && (
+                <div className="flex items-center gap-1 mt-1 text-red-600 text-sm animate-pulse">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {formik.errors.description}
                 </div>
               )}
             </div>
@@ -215,6 +274,36 @@ export default function EditCoursePage() {
               {formik.touched.categoryId && formik.errors.categoryId && (
                 <div className="text-red-500 text-xs mt-1">
                   {formik.errors.categoryId}
+                </div>
+              )}
+            </div>
+
+            {/* Image URL */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Image URL
+              </label>
+              <input
+                type="text"
+                {...formik.getFieldProps("image")}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+                placeholder="https://example.com/image.png"
+              />
+              {formik.touched.image && formik.errors.image && (
+                <div className="text-red-500 text-sm mt-1">
+                  {formik.errors.image}
+                </div>
+              )}
+
+              {/* معاينة للصورة لو موجودة */}
+              {formik.values.image && (
+                <div className="mt-2 w-full h-40 rounded-lg overflow-hidden border border-gray-200">
+                  <img
+                    src={formik.values.image}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => (e.target.style.display = "none")} // اخفيها لو الرابط بايظ
+                  />
                 </div>
               )}
             </div>

@@ -7,6 +7,7 @@ let courses = [
         title: "Complete React Developer Guide", 
         instructor: "Andrew Mead", 
         duration: 40, 
+        description : "ahaaaaaaaaaaaaaaaa",
         difficulty: "Intermediate",
         img : "https://www.classcentral.com/report/wp-content/uploads/2022/03/Frame-3.png",
         categoryId: 1,

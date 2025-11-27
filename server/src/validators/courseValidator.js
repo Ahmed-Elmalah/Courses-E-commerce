@@ -3,12 +3,14 @@ const AppError = require('../utils/appError');
 
 const courseSchema = Joi.object({
   title: Joi.string().min(3).max(100).required(),
+  description: Joi.string().optional(), 
+  image: Joi.string().optional().allow(''),
   instructor: Joi.string().min(3).required(),
   duration: Joi.number().positive().required(), 
   difficulty: Joi.string().valid('Beginner', 'Intermediate', 'Advanced', 'All Levels').required(), 
   categoryId: Joi.number().integer().required(),
   price: Joi.number().min(0).optional(), 
-  description: Joi.string().min(10).optional(),
+  description: Joi.string().allow('').optional(),
   lessons: Joi.array().items(
     Joi.object({
         title: Joi.string().required(),

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate,Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import noImg from "../assets/noImage.webp";
 import Swal from "sweetalert2";
 import LessonsCard from "../Components/LessonsCard";
+import LessonModal from "../Components/LessonModal";
+import toast from "react-hot-toast";
 
 const ApiUrl = "http://localhost:3000/api";
 
@@ -12,6 +14,8 @@ export default function CourseDetailsPage() {
   const navigate = useNavigate();
   const [course, setCourse] = useState({});
   const cat = ["Programming", "Languages", "Soft Skills"];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingLesson, setEditingLesson] = useState(null);
 
   // --- Data Fetching ---
 
@@ -27,14 +31,21 @@ export default function CourseDetailsPage() {
     fetchCourse();
   }, [id]);
 
+  const handleLessonDelete = (lessonId) => {
+    setCourse((prevCourse) => ({
+      ...prevCourse,
+      lessons: prevCourse.lessons.filter((l) => l.id !== lessonId),
+    }));
+  };
+
   // delete course function
 
   const deleteCourse = async () => {
     Swal.fire({
       title: "Are you sure?",
       showCancelButton: true,
-      confirmButtonColor: "#4f39f6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#4f39f6",
       confirmButtonText: "Yes, delete it",
       theme: "dark",
     }).then((result) => {
@@ -44,6 +55,7 @@ export default function CourseDetailsPage() {
           text: "Your file has been deleted.",
           icon: "success",
           theme: "dark",
+          
         });
         axios.delete(`${ApiUrl}/courses/${course.id}`);
         navigate("../");
@@ -53,7 +65,54 @@ export default function CourseDetailsPage() {
 
   // update course function
 
+  // 2. فتح المودال للتعديل (بتتنادى من LessonsCard)
+  const openEditModal = (lesson) => {
+    setEditingLesson(lesson);
+    setIsModalOpen(true);
+  };
 
+  // 3. تقديم الفورم (Handling Submit)
+  const handleModalSubmit = async (values) => {
+    try {
+      const cleanValues = {
+        title: values.title,
+        content: values.content,
+        duration: values.duration
+      };
+
+      if (editingLesson) {
+        // --- حالة التعديل (Edit) ---
+        const res = await axios.put(
+          `${ApiUrl}/courses/${id}/lessons/${editingLesson.id}`,
+          cleanValues
+        );
+        
+        // تحديث الـ State محلياً
+        setCourse((prev) => ({
+          ...prev,
+          lessons: prev.lessons.map((l) =>
+            l.id === editingLesson.id ? { ...l, ...cleanValues } : l
+          ),
+        }));
+        toast.success("Lesson updated successfully")
+      } else {
+        // --- حالة الإضافة (Add) ---
+        const res = await axios.post(`${ApiUrl}/courses/${id}/lessons`, cleanValues);
+        
+        // إضافة الدرس الجديد للـ State
+        setCourse((prev) => ({
+          ...prev,
+          lessons: [...prev.lessons, res.data.data.lesson],
+        }));
+        toast.success("Lesson added successfully");
+      }
+      
+      setIsModalOpen(false); // قفل المودال
+    } catch (err) {
+      console.error(err);
+      toast.error("Operation failed")
+    }
+  };
   // --- Display Course Details ---
 
   const hasDiscount =
@@ -96,7 +155,8 @@ export default function CourseDetailsPage() {
 
             <div className="w-full h-96 bg-gray-200 rounded-lg overflow-hidden mb-8">
               <img
-                src={course.image || course.img || noImg}
+                // src={course.image ?? course.img ?? noImg}
+                src={course.image === "" || course.ime === ""? noImg :course.image ?? course.img}
                 alt={course.title}
                 className="w-full h-full object-cover"
               />
@@ -115,14 +175,17 @@ export default function CourseDetailsPage() {
 
                 {/* Lessons/Course Content Section */}
                 <div className="mt-10 pt-4 border-t">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                    Course Content ({course.lessons?.length || 0} Lessons)
-                  </h2>
+                  <div className="flex w-full justify-between">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                      Course Content ({course.lessons?.length || 0} Lessons)
+                    </h2>
+                    <button className="btn bg-indigo-600 hover:bg-indigo-700">Add new lesson</button>
+                  </div>
 
                   <ul className="space-y-4">
                     {course.lessons &&
                       course.lessons.map((lesson) => (
-                        <LessonsCard key={lesson.id} lesson={lesson} />
+                        <LessonsCard key={lesson.id} lesson={lesson} onDelete={handleLessonDelete} onEdit={openEditModal} />
                       ))}
                   </ul>
                 </div>
@@ -172,9 +235,11 @@ export default function CourseDetailsPage() {
                     CheckOut
                   </button>
 
-                  {/* زراير التحكم (Edit & Delete) - منظر فقط */}
                   <div className="flex space-x-3 mt-4">
-                    <button onClick={()=> navigate(`/edit-course/${course.id}`)} className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 rounded-lg transition duration-200 text-sm opacity-80 cursor-default">
+                    <button
+                      onClick={() => navigate(`/edit-course/${course.id}`)}
+                      className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 rounded-lg transition duration-200 text-sm opacity-80 cursor-default"
+                    >
                       Edit Course
                     </button>
 
@@ -195,6 +260,14 @@ export default function CourseDetailsPage() {
           </p>
         )}
       </div>
+
+      <LessonModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleModalSubmit}
+        initialValues={editingLesson} // لو فيه درس، ابعته كقيم أولية
+        isEditMode={!!editingLesson}  // Boolean عشان نغير العنوان
+      />
     </div>
   );
 }
