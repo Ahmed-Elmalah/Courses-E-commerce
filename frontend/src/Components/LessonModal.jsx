@@ -55,7 +55,7 @@ export default function LessonModal({ isOpen, onClose, onSubmit, initialValues, 
                 <Field
                   name="title"
                   type="text"
-                  className="input text-white input-bordered w-full focus:ring-2 focus:ring-indigo-500 text-gray-900"
+                  className="input  input-bordered w-full focus:ring-2 focus:ring-indigo-500 bg-white border border-indigo-600"
                   placeholder="e.g. Introduction to React"
                 />
                 <ErrorMessage name="title" component="div" className="text-red-500 text-xs mt-1" />
@@ -68,7 +68,7 @@ export default function LessonModal({ isOpen, onClose, onSubmit, initialValues, 
                   name="content"
                   as="textarea" // حولناه لـ textarea بسهولة
                   rows="3"
-                  className="textarea text-white textarea-bordered w-full focus:ring-2 focus:ring-indigo-500 text-gray-900"
+                  className="textarea  textarea-bordered w-full focus:ring-2 focus:ring-indigo-500 bg-white border border-indigo-600"
                   placeholder="e.g. https://video-url.com or Description"
                 />
                 <ErrorMessage name="content" component="div" className="text-red-500 text-xs mt-1" />
@@ -80,7 +80,7 @@ export default function LessonModal({ isOpen, onClose, onSubmit, initialValues, 
                 <Field
                   name="duration"
                   type="text"
-                  className="input text-white input-bordered w-full focus:ring-2 focus:ring-indigo-500 text-gray-900"
+                  className="input  input-bordered w-full focus:ring-2 focus:ring-indigo-500 bg-white border border-indigo-600"
                   placeholder="e.g. 10 mins"
                 />
                 <ErrorMessage name="duration" component="div" className="text-red-500 text-xs mt-1" />
