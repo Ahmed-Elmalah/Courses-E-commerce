@@ -75,8 +75,9 @@
   });
 
   const createCourse = asyncHandler(async (req, res, next) => {
+    const newId = courses.length > 0 ? Math.max(...courses.map(c => c.id)) + 1 : 1;
     const newCourse = {
-      id: req.body.id || courses.length + 1,
+      id: newId,
       ...req.body,
       lessons: req.body.lessons || [],
     };
