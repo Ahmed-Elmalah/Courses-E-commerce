@@ -2,7 +2,7 @@ import axios from "axios";
 import { MdDelete, MdOutlineModeEditOutline } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 export default function LessonsCard({ lesson , onDelete,onEdit }) {
   const params = useParams();
